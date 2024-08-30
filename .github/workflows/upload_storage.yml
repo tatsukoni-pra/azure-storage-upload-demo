@@ -21,6 +21,7 @@ jobs:
           inlineScript: |
             az storage blob upload-batch \
               --account-name tatsukonitestv2b643 \
+              --auth-mode login \
               --destination upload-test \
               --source ./src \
               --overwrite
