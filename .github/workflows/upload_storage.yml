@@ -1,0 +1,33 @@
+name: Upload Azure Storage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Upload to blob storage
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name tatsukonitestv2b643 \
+              --destination upload-test \
+              --source ./src \
+              --overwrite \
+              --auth-mode key
+
+      - name: Logout
+        run: |
+          az logout
+        if: always()
